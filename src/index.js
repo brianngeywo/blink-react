@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './assets/index.css';
+// import './assets/index.css';
 import App from './App';
 // import TopBar from './components/TopBar';
 // import MyFooter from './components/MyFooter';
