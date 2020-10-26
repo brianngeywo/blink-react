@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 // import logo from './logo.svg'
 import './assets/App.css'
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 // import Logged from './components/Logged'
 // import Conditional from './components/Conditional'
 // import MyFooter from './components/MyFooter'
@@ -247,24 +247,104 @@ class App extends Component {
   //   )
   // }
 
+  // update forms
     constructor() {
       super()
-      this.state= {
-        character: {}
+      this.state = {
+        loading: false,
+        user: {},
+        name: "",
+        age: "",
+        isFriendly: false,
+        gender: "",
+        favColor: ""
       }
+      this.Handlechange = this.Handlechange.bind(this)
     }
     componentDidMount() {
+      this.setState({loading: true})
       fetch("https://reqres.in/api/users/2")
       .then(response => response.json())
       .then(data => {
         this.setState({
-          character: data
+          loading: false,
+          user: data.data
         })
       })
     }
+    Handlechange(event) {
+      const {name , value, type, checked} = event.target
+      type === "checkbox" ? this.setState({[name]: 
+        checked}) : this.setState({[name]: value})
+    }
   render() {
+    const text = this.state.loading ? "loading..." : this.state.user.last_name
+    const SelectedGender = this.state.gender ? "male" : "female"
     return (
-      <div>awesome {this.state.character.avatar}</div>
+      <form>
+        <div>awesome {text}</div>
+        <label>
+          Name:
+          <input 
+          type="text" 
+          name="name" 
+          value={this.state.name} 
+          placeholder="type anything" 
+          onChange={this.Handlechange}/>
+        </label>
+        <br/>
+        <label>
+          age:
+          <input 
+          type="number" 
+          name="age" 
+          value={this.state.age} 
+          placeholder="e.g 18" 
+          onChange={this.Handlechange}/>
+          <p>{this.state.name} {this.state.age}</p>
+        </label>
+        <br/>
+        <textarea value={"some value"} 
+        onChange={this.Handlechange}/>
+        <br/>
+        <label>
+          <input type="checkbox" 
+          checked={this.state.isFriendly} 
+          onChange={this.Handlechange} 
+          name="isFriendly"/>is friendly?        
+        </label> 
+        <br/>
+        <label>
+          <input type="radio" 
+          value="man" 
+          checked={this.SelectedGender} 
+          onChange={this.Handlechange} 
+          name="gender"/>male?        
+        </label> 
+        <br/>
+        <label>
+          <input type="radio" 
+          value="woman" 
+          checked={this.SelectedGender} 
+          onChange={this.Handlechange} 
+          name="gender"/>female?        
+        </label> 
+        <br/>
+        <div>are you sure you are a {this.state.gender}?</div>
+        <br/>
+        <select value={this.state.favColor}
+        onChange={this.Handlechange}
+        name="favColor">
+          <option value="red">red</option>
+          <option value="green">green</option>
+          <option value="purple">purple</option>
+          <option value="teal">teal</option>
+        </select>
+        <br/>
+        <p>your favorite color is {this.state.favColor}</p>
+        <br/>
+        <input type="submit" value="Submit"/>
+      </form>
     )
   }
 }
